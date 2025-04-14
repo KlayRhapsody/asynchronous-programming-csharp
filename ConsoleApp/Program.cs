@@ -1,26 +1,7 @@
-﻿
-List<Task> tasks =
-[
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-    RunAsync(),
-];
+﻿using ConsoleApp.Examples;
 
-await Task.WhenAll(tasks);
+// await AsyncExample1.RunConcurrentTasksWhenTaskDelay();
+// await AsyncExample1.RunConcurrentTasksWhenThreadSleep();
+// await AsyncExample1.RunConcurrentTasksByTaskRun();
 
-static Task RunAsync()
-{
-    return Task.Run(() =>
-    {
-        Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
-        Thread.Sleep(2000);
-    });
-}
+await RaceConditionExample.RunCounterIncrement();
