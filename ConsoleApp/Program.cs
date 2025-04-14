@@ -14,5 +14,5 @@ await Task.WhenAll(tasks);
 static async Task RunAsync()
 {
     Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
-    await Task.Delay(2000);
+    Thread.Sleep(2000);
 }
