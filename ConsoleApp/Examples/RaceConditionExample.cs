@@ -1,6 +1,7 @@
 namespace ConsoleApp.Examples;
 public static class RaceConditionExample
 {
+    private static object _lock = new object();
     public static int Counter { get; set; } = 0;
 
     public static async Task RunCounterIncrement()
@@ -15,7 +16,10 @@ public static class RaceConditionExample
     {
         for (int i = 0; i < 1000000; i++)
         {
-            Counter++;
+            lock (_lock)
+            {
+                Counter++;
+            }
         }
     }
 }
