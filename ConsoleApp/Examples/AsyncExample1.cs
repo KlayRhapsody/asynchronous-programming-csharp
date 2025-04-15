@@ -88,11 +88,19 @@ public static class AsyncExample1
     {
         Console.WriteLine($"Step 1, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
+        List<Task> tasks = [];
+
+        for (int i = 0; i < 10; i++)
+        {
+            tasks.Add(Task.Run(() => Thread.Sleep(10000)));
+        }
+        
         Task task = RunEachStep();
+        tasks.Add(task);
 
         Console.WriteLine($"Step 2, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-        await task;
+        await Task.WhenAll(tasks);
 
         Console.WriteLine($"Step 3, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
@@ -100,7 +108,9 @@ public static class AsyncExample1
         {
             Console.WriteLine($"Step 4, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-            await Task.Delay(2000);
+            // await Task.Delay(2000);
+            HttpClient client = new();
+            await client.GetAsync("https://www.google.com");
 
             Console.WriteLine($"Step 5, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
         }
