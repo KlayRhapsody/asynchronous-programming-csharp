@@ -83,6 +83,28 @@ public static class AsyncExample1
             });
         }
     }
+
+    public static async Task RunAsyncStepByStep()
+    {
+        Console.WriteLine($"Step 1, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+        Task task = RunEachStep();
+
+        Console.WriteLine($"Step 2, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+        await task;
+
+        Console.WriteLine($"Step 3, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+        static async Task RunEachStep()
+        {
+            Console.WriteLine($"Step 4, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+            await Task.Delay(2000);
+
+            Console.WriteLine($"Step 5, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+        }
+    }
 }
 
 
