@@ -10,4 +10,6 @@
 
 // await AsyncExample.RunSyncToAsyncMethod();
 
-await AsyncExample.RunTaskRunWithThreadPoolBehavior();
+// await AsyncExample.RunTaskRunWithThreadPoolBehavior();
+
+await AsyncExample.RunTaskStatus();

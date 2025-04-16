@@ -142,26 +142,72 @@ public static class AsyncExample
         for (int i = 0; i < count; i++)
         {
             var index = string.Format("{0:D2}", i);
-            tasks.Add(Task.Run(() =>
+            tasks.Add(Task.Run(async () =>
             {
+                HttpClient client = new();
+
                 Console.WriteLine($"Part 1, {index} Send Request >>, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-                string result = client.GetStringAsync(url).Result;
+                string result = await client.GetStringAsync(url);
 
                 Console.WriteLine($"Part 1, {index} Get Result <<, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
             }));
 
-            tasks.Add(Task.Run(() =>
+            tasks.Add(Task.Run(async () =>
             {
+                HttpClient client = new();
+                
                 Console.WriteLine($"Part 2, {index} Send Request >>, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-                string result = client.GetStringAsync(url).Result;
+                string result = await client.GetStringAsync(url);
 
                 Console.WriteLine($"Part 2, {index} Get Result <<, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
             }));
         }
 
         await Task.WhenAll(tasks);
+    }
+
+    public static async Task RunTaskStatus()
+    {
+        List<Task> tasks = 
+        [
+            RunAsync(),
+            RunAsync(),
+            RunAsync(),
+            RunAsync(),
+        ];
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch(Exception ex)
+        {
+        }
+
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"Task Id: {task.Id}, Status: {task.Status}, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"IsCompleted: {task.IsCompleted}");
+            Console.WriteLine($"IsFaulted: {task.IsFaulted}");
+            Console.WriteLine($"IsCanceled: {task.IsCanceled}");
+        }
+
+        static Task RunAsync()
+        {
+            Random random = new();
+            if (random.Next(0, 2) == 0)
+            {
+                return Task.FromCanceled(new CancellationToken(true));
+            }
+
+            return Task.Run(() =>
+            {
+                Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+                Thread.Sleep(2000);
+            });
+        }
     }
 }
 
