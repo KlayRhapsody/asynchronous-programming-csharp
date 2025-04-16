@@ -97,10 +97,11 @@ public static class AsyncExample1
         
         Task task = RunEachStep();
         tasks.Add(task);
+        // await task.WaitAsync(TimeSpan.FromSeconds(5));
 
         Console.WriteLine($"Step 2, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-        Task.WhenAll(tasks).Wait();
+        await Task.WhenAll(tasks);
 
         Console.WriteLine($"Step 3, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
@@ -108,13 +109,30 @@ public static class AsyncExample1
         {
             Console.WriteLine($"Step 4, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-            // await Task.Delay(2000);
             HttpClient client = new();
             await client.GetAsync("https://www.google.com");
 
             Console.WriteLine($"Step 5, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
         }
     }
+
+    public static async Task RunSyncToAsyncMethod()
+    {
+        string name = await GetNameAsync();
+        Console.WriteLine($"Name: {name}, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+        Task<string> GetNameAsync()
+        {
+            return Task.FromResult(GetName());
+        }
+
+        string GetName()
+        {
+            return "Hello";
+        }
+    }
+    
+    
 }
 
 

@@ -6,4 +6,6 @@
 
 // await RaceConditionExample.RunCounterIncrement();
 
-await AsyncExample1.RunAsyncStepByStep();
+// await AsyncExample1.RunAsyncStepByStep();
+
+await AsyncExample1.RunSyncToAsyncMethod();
