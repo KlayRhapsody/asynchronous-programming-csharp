@@ -100,7 +100,7 @@ public static class AsyncExample1
 
         Console.WriteLine($"Step 2, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
-        await Task.WhenAll(tasks);
+        Task.WhenAll(tasks).Wait();
 
         Console.WriteLine($"Step 3, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
 
