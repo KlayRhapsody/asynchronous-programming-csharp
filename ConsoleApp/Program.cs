@@ -8,4 +8,6 @@
 
 // await AsyncExample1.RunAsyncStepByStep();
 
-await AsyncExample1.RunSyncToAsyncMethod();
+// await AsyncExample.RunSyncToAsyncMethod();
+
+await AsyncExample.RunTaskRunWithThreadPoolBehavior();

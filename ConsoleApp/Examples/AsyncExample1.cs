@@ -1,7 +1,7 @@
 
 namespace ConsoleApp.Examples;
 
-public static class AsyncExample1
+public static class AsyncExample
 {
     public static async Task RunConcurrentTasksWhenTaskDelay()
     {
@@ -132,7 +132,37 @@ public static class AsyncExample1
         }
     }
     
-    
+    public static async Task RunTaskRunWithThreadPoolBehavior()
+    {
+        HttpClient client = new();
+        int count = 10;
+        string url = "https://httpstat.us/200?sleep=2000";
+        List<Task> tasks = new();
+
+        for (int i = 0; i < count; i++)
+        {
+            var index = string.Format("{0:D2}", i);
+            tasks.Add(Task.Run(() =>
+            {
+                Console.WriteLine($"Part 1, {index} Send Request >>, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+                string result = client.GetStringAsync(url).Result;
+
+                Console.WriteLine($"Part 1, {index} Get Result <<, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                Console.WriteLine($"Part 2, {index} Send Request >>, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+
+                string result = client.GetStringAsync(url).Result;
+
+                Console.WriteLine($"Part 2, {index} Get Result <<, Thread Id: {Thread.CurrentThread.ManagedThreadId}");
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+    }
 }
 
 
